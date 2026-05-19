@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const { User, getConnectionError } = require('./db');
+const { User } = require('./db');
 const router = express.Router();
 
 // Register
@@ -65,38 +65,7 @@ router.get('/me', async (req, res) => {
     }
 });
 
-// Debug endpoint
-router.get('/debug', (req, res) => {
-    const rawUri = process.env.MONGODB_URI || 'not-set (using local fallback)';
-    let maskedUri = rawUri;
-    
-    // Mask password in URI
-    if (rawUri.includes('://')) {
-        const parts = rawUri.split('://');
-        if (parts[1].includes('@')) {
-            const credentialsAndHost = parts[1].split('@');
-            const credentials = credentialsAndHost[0].split(':');
-            const username = credentials[0];
-            const maskedPassword = '***';
-            maskedUri = `${parts[0]}://${username}:${maskedPassword}@${credentialsAndHost[1]}`;
-        }
-    }
-    
-    const mongooseState = {
-        0: 'disconnected',
-        1: 'connected',
-        2: 'connecting',
-        3: 'disconnecting',
-        99: 'uninitialized'
-    }[require('mongoose').connection.readyState] || 'unknown';
 
-    res.json({
-        hasMongoEnv: !!process.env.MONGODB_URI,
-        maskedUri: maskedUri,
-        mongooseState: mongooseState,
-        connectionError: getConnectionError()
-    });
-});
 
 // Auth middleware
 function requireAuth(req, res, next) {
