@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Play — Virgi's Pout Game Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-name { font-weight: 600; color: var(--yellow); }
+        .logout-btn { font-size: 0.8rem; padding: 4px 10px; border-radius: var(--radius-sm); border: 1px solid var(--glass-border); color: var(--text-secondary); transition: all 0.2s; }
+        .logout-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+        
+        /* Lobby Overlay */
+        .lobby-overlay {
+            position: absolute; inset: 0; z-index: 50;
+            background: rgba(13,10,18,0.85); backdrop-filter: blur(5px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-radius: var(--radius-lg); opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .lobby-overlay.active { opacity: 1; pointer-events: auto; }
+        .lobby-card {
+            background: var(--bg-card); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md); padding: 25px; width: 85%; max-width: 320px;
+            text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .lobby-title { font-family: 'Outfit'; font-weight: 700; font-size: 1.2rem; margin-bottom: 20px; color: var(--yellow); }
+        .room-code-display {
+            font-family: monospace; font-size: 2rem; font-weight: bold; letter-spacing: 4px;
+            background: rgba(0,0,0,0.3); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 15px; color: var(--pink);
+        }
+        .lobby-input {
+            width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.2); color: var(--text-primary); font-family: monospace; font-size: 1.2rem;
+            text-align: center; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px;
+        }
+        .lobby-btn {
+            width: 100%; padding: 10px; border-radius: var(--radius-sm); border: none; font-family: 'Outfit'; font-weight: 600;
+            background: var(--gradient-primary); color: var(--bg-primary); cursor: pointer; margin-bottom: 10px;
+        }
+        .lobby-btn.secondary { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: var(--yellow); animation: spin 1s ease-in-out infinite; margin-top: 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .online-status {
+            position: absolute; top: 10px; right: 10px; z-index: 20;
+            background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: var(--radius-full);
+            font-size: 0.7rem; font-weight: 500; display: flex; align-items: center; gap: 6px;
+        }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <div class="header-content">
+            <div class="header-logo"><span class="logo-icon">🎮</span></div>
+            <h1 id="site-title">VIRGI'S POUT GAME CENTER</h1>
+            <div class="user-info">
+                <span class="user-name" id="display-username">Loading...</span>
+                <button class="logout-btn" id="btn-logout">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="game-stage">
+        <div class="stage-image-wrap" id="stage-wrap">
+            <img src="1779190954098.webp" alt="Virgi" class="stage-image" id="stage-image">
+            <div class="stage-vignette"></div>
+
+            <div class="online-status" id="online-status" style="display:none">
+                <div class="status-dot"></div> <span id="opponent-name">Playing vs ...</span>
+            </div>
+
+            <!-- Lobby Overlay -->
+            <div class="lobby-overlay" id="lobby-overlay">
+                <!-- Create/Join Choice -->
+                <div class="lobby-card" id="lobby-choice">
+                    <div class="lobby-title">Online Multiplayer</div>
+                    <button class="lobby-btn" id="btn-create-room">Create Room</button>
+                    <div style="margin:15px 0; font-size:0.8rem; color:var(--text-secondary)">OR</div>
+                    <input type="text" class="lobby-input" id="join-code" placeholder="ENTER CODE" maxlength="6">
+                    <button class="lobby-btn secondary" id="btn-join-room">Join Room</button>
+                    <div id="lobby-error" style="color:#ff6b6b; font-size:0.8rem; margin-top:10px; display:none"></div>
+                </div>
+
+                <!-- Waiting for opponent -->
+                <div class="lobby-card" id="lobby-waiting" style="display:none">
+                    <div class="lobby-title">Waiting for friend...</div>
+                    <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:10px">Share this code to play:</div>
+                    <div class="room-code-display" id="display-code">------</div>
+                    <div class="loading-spinner"></div>
+                    <button class="lobby-btn secondary" id="btn-cancel-room" style="margin-top:20px">Cancel</button>
+                </div>
+            </div>
+
+            <div class="forehead-game" id="forehead-game"></div>
+            <div class="float-status" id="game-status">Your Turn (X)</div>
+        </div>
+
+        <div class="controls-bar">
+            <div class="mode-toggle" id="mode-toggle">
+                <button class="mode-btn active" data-mode="ai" id="btn-mode-ai">🤖 vs AI</button>
+                <button class="mode-btn" data-mode="local" id="btn-mode-local">👥 Local</button>
+                <button class="mode-btn" data-mode="online" id="btn-mode-online">🌐 Online</button>
+            </div>
+            
+            <div class="carousel-track" id="carousel-track">
+                <button class="game-btn active" data-game="tictactoe">
+                    <span class="btn-emoji">#</span><span class="game-label">TIC-TAC-TOE</span>
+                </button>
+                <button class="game-btn" data-game="snakes">
+                    <span class="btn-emoji">🐍</span><span class="game-label">SNAKES</span>
+                </button>
+                <button class="game-btn" data-game="ludo">
+                    <span class="btn-emoji">🎲</span><span class="game-label">LUDO</span>
+                </button>
+                <button class="game-btn" data-game="chess">
+                    <span class="btn-emoji">♟️</span><span class="game-label">CHESS</span>
+                </button>
+            </div>
+            <button class="control-btn" id="btn-reset"><span>↻</span> Reset Game</button>
+        </div>
+    </main>
+
+    <footer id="main-footer"><p>Made with <span class="heart">💛</span> for Virgi</p></footer>
+
+    <script src="tictactoe.js"></script>
+    <script src="snakes.js"></script>
+    <script src="ludo.js"></script>
+    <script src="chess.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

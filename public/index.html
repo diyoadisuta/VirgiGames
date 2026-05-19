@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virgi's Pout Game Center</title>
+    <meta name="description" content="Play classic board games on Virgi's forehead — Tic-Tac-Toe, Snakes & Ladders, Ludo, and Chess">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .landing-hero {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: calc(100vh - var(--header-height)); padding: 40px 20px;
+            text-align: center;
+        }
+        .hero-title {
+            font-family: 'Outfit', sans-serif; font-weight: 900; font-size: clamp(2.5rem, 8vw, 4rem);
+            line-height: 1.1; margin-bottom: 20px;
+            background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.25rem); color: var(--text-secondary);
+            max-width: 600px; margin-bottom: 40px; line-height: 1.6;
+        }
+        .cta-buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+        .btn-primary, .btn-secondary {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 14px 32px; border-radius: var(--radius-full);
+            font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem;
+            text-decoration: none; transition: all var(--transition-base);
+        }
+        .btn-primary { background: var(--gradient-primary); color: var(--bg-primary); box-shadow: 0 8px 25px var(--pink-glow); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 35px var(--pink-glow); }
+        .btn-secondary {
+            background: rgba(255,255,255,0.05); color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--yellow); }
+        .features {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; max-width: 900px; margin: 60px auto 0;
+        }
+        .feature-card {
+            background: var(--bg-card); border: 1px solid var(--glass-border);
+            padding: 24px; border-radius: var(--radius-lg); text-align: left;
+        }
+        .feature-icon { font-size: 2rem; margin-bottom: 12px; }
+        .feature-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; color: var(--yellow); }
+        .feature-desc { font-size: 0.9rem; color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <div class="header-content">
+            <div class="header-logo"><span class="logo-icon">🎮</span></div>
+            <h1 id="site-title">VIRGI'S POUT GAME CENTER</h1>
+            <div></div> <!-- Spacer -->
+        </div>
+    </header>
+
+    <main class="landing-hero">
+        <div class="stage-image-wrap" style="max-width: 300px; margin-bottom: 40px; box-shadow: 0 0 80px rgba(233,77,139,0.3);">
+            <img src="1779190954098.webp" alt="Virgi" class="stage-image" style="border-radius: var(--radius-lg);">
+        </div>
+        
+        <h2 class="hero-title">PLAY ON THE<br>FOREHEAD</h2>
+        <p class="hero-subtitle">Experience classic board games like never before. Challenge your friends online or play against AI directly on Virgi's pouty face.</p>
+        
+        <div class="cta-buttons">
+            <a href="login.html" class="btn-primary">Login to Play</a>
+            <a href="register.html" class="btn-secondary">Create Account</a>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <div class="feature-title">4 Classic Games</div>
+                <div class="feature-desc">Tic-Tac-Toe, Snakes & Ladders, Ludo, and Chess.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <div class="feature-title">Online Multiplayer</div>
+                <div class="feature-desc">Create a room, share the code, and play with friends anywhere.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <div class="feature-title">Track Stats</div>
+                <div class="feature-desc">Win games to increase your global win counter.</div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="main-footer"><p>Made with <span class="heart">💛</span> for Virgi</p></footer>
+</body>
+</html>
