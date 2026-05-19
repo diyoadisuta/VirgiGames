@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const { User } = require('./db');
+const { User, getConnectionError } = require('./db');
 const router = express.Router();
 
 // Register
@@ -93,7 +93,8 @@ router.get('/debug', (req, res) => {
     res.json({
         hasMongoEnv: !!process.env.MONGODB_URI,
         maskedUri: maskedUri,
-        mongooseState: mongooseState
+        mongooseState: mongooseState,
+        connectionError: getConnectionError()
     });
 });
 

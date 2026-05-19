@@ -4,9 +4,14 @@ require('dotenv').config();
 // Mongoose connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/virgigames';
 
+let connectionError = null;
+
 mongoose.connect(MONGODB_URI, { family: 4 })
     .then(() => console.log('[MongoDB] Connected to database'))
-    .catch(err => console.error('[MongoDB] Connection error:', err));
+    .catch(err => {
+        console.error('[MongoDB] Connection error:', err);
+        connectionError = err.message || err.toString();
+    });
 
 // Define User Schema
 const userSchema = new mongoose.Schema({
@@ -19,4 +24,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = { User };
+module.exports = { User, getConnectionError: () => connectionError };
