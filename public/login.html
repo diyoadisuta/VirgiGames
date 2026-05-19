@@ -100,7 +100,7 @@
                     body: JSON.stringify({ username: u, password: p })
                 });
                 const data = await res.json();
-                if (data.ok) { window.location.href = '/play'; }
+                if (data.ok) { window.location.href = '/play.html'; }
                 else { err.textContent = data.error; err.style.display = 'block'; btn.textContent = 'Login to Play'; btn.disabled = false; }
             } catch(e) {
                 err.textContent = 'Network error. Please try again.'; err.style.display = 'block';
