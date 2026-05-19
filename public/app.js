@@ -18,7 +18,7 @@ class App {
     async init() {
         // Fetch user info
         try {
-            const res = await fetch('/api/me');
+            const res = await fetch(BACKEND_URL + '/api/me', { credentials: 'include' });
             const data = await res.json();
             if (data.error) { window.location.href = '/login.html'; return; }
             this.username = data.username;
@@ -26,12 +26,12 @@ class App {
         } catch(e) { window.location.href = '/login.html'; return; }
 
         document.getElementById('btn-logout').addEventListener('click', async () => {
-            await fetch('/api/logout', { method: 'POST' });
+            await fetch(BACKEND_URL + '/api/logout', { method: 'POST', credentials: 'include' });
             window.location.href = '/index.html';
         });
 
         // Initialize Socket
-        this.socket = io();
+        this.socket = io(BACKEND_URL, { withCredentials: true });
         this.setupSocketListeners();
 
         // UI Listeners
