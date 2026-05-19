@@ -39,8 +39,6 @@ const sessionMiddleware = session({
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: true, // Must be true for SameSite=none
-        sameSite: 'none', // Required for cross-origin cookies
         maxAge: 24 * 60 * 60 * 1000 
     }
 });
