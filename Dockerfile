@@ -1,5 +1,5 @@
-# Gunakan image resmi Node.js versi 18 (Slim untuk ukuran lebih ringan dan stabilitas DNS glibc)
-FROM node:18-slim
+# Gunakan image resmi Node.js versi 20 (Slim untuk ukuran lebih ringan dan stabilitas glibc + global crypto)
+FROM node:20-slim
 
 # Set direktori kerja di dalam container
 WORKDIR /usr/src/app
