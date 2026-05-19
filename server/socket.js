@@ -1,5 +1,5 @@
 const rooms = require('./rooms');
-const db = require('./db');
+const { User } = require('./db');
 
 function initSocket(io) {
     io.on('connection', (socket) => {
@@ -57,18 +57,16 @@ function initSocket(io) {
         });
 
         // Game over — update stats
-        socket.on('game-over', (data) => {
-            if (data.winner) {
-                try {
-                    db.prepare('UPDATE users SET wins = wins + 1 WHERE username = ?').run(data.winner);
-                } catch(e) {}
-            }
-            if (data.players) {
-                data.players.forEach(p => {
-                    try {
-                        db.prepare('UPDATE users SET games_played = games_played + 1 WHERE username = ?').run(p);
-                    } catch(e) {}
-                });
+        socket.on('game-over', async (data) => {
+            try {
+                if (data.winner) {
+                    await User.updateOne({ username: data.winner }, { $inc: { wins: 1 } });
+                }
+                if (data.players && Array.isArray(data.players)) {
+                    await User.updateMany({ username: { $in: data.players } }, { $inc: { games_played: 1 } });
+                }
+            } catch (err) {
+                console.error('[Socket] Error updating game stats:', err);
             }
         });
 

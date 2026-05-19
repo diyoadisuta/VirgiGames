@@ -9,9 +9,10 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "better-sqlite3": "^11.10.0",
+    "dotenv": "^17.4.2",
     "express": "^4.22.2",
     "express-session": "^1.19.0",
+    "mongoose": "^9.6.2",
     "socket.io": "^4.8.3"
   }
 }

@@ -1,22 +1,22 @@
-const Database = require('better-sqlite3');
-const path = require('path');
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-const dbPath = path.join(__dirname, '..', 'data', 'virgigames.db');
-const db = new Database(dbPath);
+// Mongoose connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/virgigames';
 
-// Enable WAL mode for better performance
-db.pragma('journal_mode = WAL');
+mongoose.connect(MONGODB_URI)
+    .then(() => console.log('[MongoDB] Connected to database'))
+    .catch(err => console.error('[MongoDB] Connection error:', err));
 
-// Create tables
-db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        wins INTEGER DEFAULT 0,
-        games_played INTEGER DEFAULT 0,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-`);
+// Define User Schema
+const userSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    password_hash: { type: String, required: true },
+    wins: { type: Number, default: 0 },
+    games_played: { type: Number, default: 0 },
+    created_at: { type: Date, default: Date.now }
+});
 
-module.exports = db;
+const User = mongoose.model('User', userSchema);
+
+module.exports = { User };
