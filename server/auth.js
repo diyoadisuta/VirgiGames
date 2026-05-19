@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
         res.json({ ok: true, username });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + (err.message || err.toString()) });
     }
 });
 
@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
         res.json({ ok: true, username: user.username, wins: user.wins });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + (err.message || err.toString()) });
     }
 });
 
@@ -61,7 +61,7 @@ router.get('/me', async (req, res) => {
         res.json(user);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error: ' + (err.message || err.toString()) });
     }
 });
 
