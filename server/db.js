@@ -4,7 +4,7 @@ require('dotenv').config();
 // Mongoose connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/virgigames';
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, { family: 4 })
     .then(() => console.log('[MongoDB] Connected to database'))
     .catch(err => console.error('[MongoDB] Connection error:', err));
 
