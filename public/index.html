@@ -3,52 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virgi's Pout Game Center</title>
-    <meta name="description" content="Play classic board games on Virgi's forehead — Tic-Tac-Toe, Snakes & Ladders, Ludo, and Chess">
+    <title>Virgi's Pout Game Center — Play on the Forehead</title>
+    <meta name="description" content="Play classic board games on Virgi's forehead — Tic-Tac-Toe, Snakes & Ladders, Ludo, and Chess. Challenge friends online or play vs AI!">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
         .landing-hero {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: calc(100vh - var(--header-height)); padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - var(--header-height));
+            padding: 60px 24px 80px;
             text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
         }
+
+        /* Breathing breathing effect on main portrait wrapper */
+        .hero-portrait-wrap {
+            position: relative;
+            max-width: 280px;
+            margin-bottom: 40px;
+            border-radius: var(--radius-lg);
+            border: 2px solid rgba(255, 59, 139, 0.3);
+            box-shadow: 0 0 50px rgba(255, 59, 139, 0.25), var(--shadow-premium);
+            animation: portraitBreathe 4s infinite alternate ease-in-out;
+            transition: all var(--transition-spring);
+        }
+        .hero-portrait-wrap:hover {
+            transform: scale(1.04) rotate(1deg);
+            border-color: var(--yellow);
+            box-shadow: 0 0 70px rgba(255, 210, 20, 0.4), var(--shadow-premium);
+        }
+        .hero-portrait-img {
+            border-radius: calc(var(--radius-lg) - 2px);
+            transition: transform var(--transition-base);
+        }
+
+        @keyframes portraitBreathe {
+            0% { transform: translateY(0); box-shadow: 0 0 40px rgba(255, 59, 139, 0.2), var(--shadow-premium); }
+            100% { transform: translateY(-8px); box-shadow: 0 0 60px rgba(255, 59, 139, 0.4), var(--shadow-premium); }
+        }
+
         .hero-title {
-            font-family: 'Outfit', sans-serif; font-weight: 900; font-size: clamp(2.5rem, 8vw, 4rem);
-            line-height: 1.1; margin-bottom: 20px;
-            background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.6rem, 7.5vw, 4.5rem);
+            line-height: 1.05;
+            margin-bottom: 24px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 50px rgba(255, 59, 139, 0.1);
         }
+
         .hero-subtitle {
-            font-size: clamp(1rem, 3vw, 1.25rem); color: var(--text-secondary);
-            max-width: 600px; margin-bottom: 40px; line-height: 1.6;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin-bottom: 44px;
+            line-height: 1.7;
+            font-weight: 400;
         }
-        .cta-buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+        /* Action triggers */
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 80px;
+        }
         .btn-primary, .btn-secondary {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 14px 32px; border-radius: var(--radius-full);
-            font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem;
-            text-decoration: none; transition: all var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            border-radius: var(--radius-full);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            transition: all var(--transition-spring);
         }
-        .btn-primary { background: var(--gradient-primary); color: var(--bg-primary); box-shadow: 0 8px 25px var(--pink-glow); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 35px var(--pink-glow); }
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--bg-primary);
+            box-shadow: 0 8px 25px var(--pink-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 12px 35px var(--pink-glow);
+        }
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+        
         .btn-secondary {
-            background: rgba(255,255,255,0.05); color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
             border: 1px solid var(--glass-border);
+            backdrop-filter: blur(8px);
         }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--yellow); }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--yellow);
+            box-shadow: 0 0 15px rgba(255, 210, 20, 0.15);
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        /* Features Display Grid */
         .features {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px; max-width: 900px; margin: 60px auto 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            width: 100%;
+            max-width: 920px;
+            margin: 0 auto;
         }
         .feature-card {
-            background: var(--bg-card); border: 1px solid var(--glass-border);
-            padding: 24px; border-radius: var(--radius-lg); text-align: left;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            padding: 32px 24px;
+            border-radius: var(--radius-lg);
+            text-align: left;
+            backdrop-filter: blur(12px);
+            transition: all var(--transition-spring);
+            position: relative;
+            overflow: hidden;
         }
-        .feature-icon { font-size: 2rem; margin-bottom: 12px; }
-        .feature-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; color: var(--yellow); }
-        .feature-desc { font-size: 0.9rem; color: var(--text-secondary); }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 59, 139, 0.25);
+            box-shadow: var(--shadow-premium), 0 0 25px rgba(157, 78, 221, 0.15);
+            background: var(--bg-card-hover);
+        }
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: transform var(--transition-spring);
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.25) rotate(-8deg);
+        }
+
+        .feature-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--yellow);
+            letter-spacing: 0.02em;
+        }
+        .feature-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -56,17 +188,18 @@
         <div class="header-content">
             <div class="header-logo"><span class="logo-icon">🎮</span></div>
             <h1 id="site-title">VIRGI'S POUT GAME CENTER</h1>
-            <div></div> <!-- Spacer -->
+            <div style="width: 42px;"></div> <!-- Balanced Spacer -->
         </div>
     </header>
 
     <main class="landing-hero">
-        <div class="stage-image-wrap" style="max-width: 300px; margin-bottom: 40px; box-shadow: 0 0 80px rgba(233,77,139,0.3);">
-            <img src="1779190954098.webp" alt="Virgi" class="stage-image" style="border-radius: var(--radius-lg);">
+        <div class="hero-portrait-wrap">
+            <img src="1779190954098.webp" alt="Virgi Portrait" class="hero-portrait-img stage-image">
+            <div class="stage-vignette" style="border-radius: var(--radius-lg);"></div>
         </div>
         
         <h2 class="hero-title">PLAY ON THE<br>FOREHEAD</h2>
-        <p class="hero-subtitle">Experience classic board games like never before. Challenge your friends online or play against AI directly on Virgi's pouty face.</p>
+        <p class="hero-subtitle">Experience classic board games like never before. Challenge your friends online or play against AI directly on Virgi's pouting forehead.</p>
         
         <div class="cta-buttons">
             <a href="login.html" class="btn-primary">Login to Play</a>
@@ -76,18 +209,18 @@
         <div class="features">
             <div class="feature-card">
                 <div class="feature-icon">🎮</div>
-                <div class="feature-title">4 Classic Games</div>
-                <div class="feature-desc">Tic-Tac-Toe, Snakes & Ladders, Ludo, and Chess.</div>
+                <h3 class="feature-title">4 Classic Games</h3>
+                <p class="feature-desc">Play Tic-Tac-Toe, Snakes & Ladders, Ludo, or Chess. Perfect size fit for a pouty forehead!</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🌐</div>
-                <div class="feature-title">Online Multiplayer</div>
-                <div class="feature-desc">Create a room, share the code, and play with friends anywhere.</div>
+                <h3 class="feature-title">Online Multiplayer</h3>
+                <p class="feature-desc">Create a room, copy the 6-character code, and challenge your friends in real-time online battles.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🏆</div>
-                <div class="feature-title">Track Stats</div>
-                <div class="feature-desc">Win games to increase your global win counter.</div>
+                <h3 class="feature-title">Global Stats</h3>
+                <p class="feature-desc">Show your dominance. Beat the AI or real opponents to increase your persistent win counter.</p>
             </div>
         </div>
     </main>
